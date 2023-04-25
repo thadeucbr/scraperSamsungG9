@@ -13,6 +13,7 @@ EMAIL_ADDRESS=seu_email@gmail.com
 EMAIL_PASSWORD=sua_senha_ou_app_password
 ```
 Substitua seu_email@gmail.com pelo seu endereço de e-mail do Gmail e sua_senha_ou_app_password pela sua senha do Gmail ou uma senha de aplicativo gerada (mais seguro).
+
 3. Construa a imagem do Docker executando o seguinte comando no diretório do projeto:
 ```
 docker build -t monitorar-preco .
