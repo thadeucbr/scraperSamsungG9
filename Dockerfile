@@ -46,6 +46,7 @@ RUN CHROME_VERSION=$(google-chrome --version | sed -E "s/Google Chrome ([0-9]+).
 # Copie os arquivos necessários para o diretório de trabalho
 COPY monitorar_preco.py /app
 COPY requirements.txt /app
+COPY .env /app
 
 # Instale as dependências do projeto
 RUN pip install --trusted-host pypi.python.org -r requirements.txt

@@ -3,14 +3,30 @@ import smtplib
 import ssl
 import time
 from email.message import EmailMessage
-
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
+EMAIL_ADDRESS = "seu_email@example.com"
+EMAIL_PASSWORD = "sua_senha"
+TARGET_PRICE = 19000  # Valor máximo que você deseja pagar pelo monitor
 
+def send_email(price):
+    msg = EmailMessage()
+    msg.set_content(f"O preço do Monitor Gamer Curvo Samsung Odyssey 49 caiu para R${price}!")
+
+    msg["Subject"] = "Alerta de Preço: Monitor Gamer Curvo Samsung Odyssey 49"
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = EMAIL_ADDRESS
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
 
 def obter_preco(url):
     options = webdriver.ChromeOptions()
@@ -39,10 +55,16 @@ def monitorar_preco():
 
     while True:
         preco = obter_preco(url)
+
         if preco:
-            print(f'O preço atual do monitor é: {preco}')
+            print(f"O preço atual do monitor é: R${preco}")
+
+            if preco <= TARGET_PRICE:
+                print("O preço caiu! Enviando e-mail...")
+                send_email(preco)
+
         else:
-            print('Não foi possível obter o preço do monitor.')
+            print("Não foi possível obter o preço do monitor.")
 
         time.sleep(60 * 60)  # Aguarde uma hora (3600 segundos) antes de verificar novamente
 
