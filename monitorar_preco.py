@@ -10,9 +10,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
-EMAIL_ADDRESS = "seu_email@example.com"
-EMAIL_PASSWORD = "sua_senha"
-TARGET_PRICE = 19000  # Valor máximo que você deseja pagar pelo monitor
+load_dotenv()
+
+EMAIL_ADDRESS = os.environ.get("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+TARGET_PRICE = 8600  # Valor máximo que você deseja pagar pelo monitor
 
 def send_email(price):
     msg = EmailMessage()
@@ -24,9 +26,12 @@ def send_email(price):
 
     context = ssl.create_default_context()
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        server.send_message(msg)
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"Ocorreu um erro ao enviar o e-mail: {e}")
 
 def obter_preco(url):
     options = webdriver.ChromeOptions()
@@ -57,9 +62,13 @@ def monitorar_preco():
         preco = obter_preco(url)
 
         if preco:
-            print(f"O preço atual do monitor é: R${preco}")
+            print(f"O preço atual do monitor é: {preco}")
+            
+            # Remova o caractere 'R$' e converta a string para um número float
+            preco_num = float(preco.replace("R$", "").replace(".", "").replace(",", "."))
 
-            if preco <= TARGET_PRICE:
+
+            if preco_num <= TARGET_PRICE:
                 print("O preço caiu! Enviando e-mail...")
                 send_email(preco)
 
