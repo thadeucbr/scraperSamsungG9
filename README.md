@@ -1,5 +1,5 @@
 # Monitor de Preço
-Este projeto é um script Python que monitora o preço de um Monitor Gamer Curvo Samsung Odyssey 49 no site da Samsung e envia um alerta por e-mail quando o preço cai abaixo do valor máximo estabelecido.
+Este projeto é um script Python que monitora o preço de dois Monitores Gamer Curvo Samsung Odyssey 49 no site da Samsung e envia um alerta por e-mail quando o preço de qualquer um dos produtos cair.
 
 ## Requisitos
 - Docker
