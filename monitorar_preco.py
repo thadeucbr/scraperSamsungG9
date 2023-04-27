@@ -46,10 +46,10 @@ def obter_preco(url):
 
     try:
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "samsungbr-app-pdp-1-x-currencyContainer"))
+            EC.presence_of_element_located((By.CLASS_NAME, "samsungbr-app-pdp-1-x-summaryInstalmentsContent"))
         )
-        price_element = driver.find_elements_by_css_selector(".samsungbr-app-pdp-1-x-currencyContainer")[0]
-        price = "".join([e.text for e in price_element.find_elements_by_css_selector("*") if e.text.strip()])
+        price_element = driver.find_elements_by_css_selector(".samsungbr-app-pdp-1-x-summaryInstalmentsContent span")[0]
+        price = price_element.text.strip()
     except NoSuchElementException:
         price = None
 
